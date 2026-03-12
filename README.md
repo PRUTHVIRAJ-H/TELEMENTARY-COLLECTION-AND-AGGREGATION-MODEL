@@ -1,5 +1,3 @@
-# TELEMENTARY-COLLECTION-AND-AGGREGATION-MODEL
-
 graph TD
     %% Layer 1: The Edge
     subgraph "1. TELEMETRY (Physical Layer)"
