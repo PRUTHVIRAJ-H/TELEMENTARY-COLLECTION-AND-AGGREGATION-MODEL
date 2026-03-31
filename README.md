@@ -1,31 +1,30 @@
+# FLEETMANAGER: Real-Time IoT Telemetry Dashboard
+
+A high-performance observability platform for ESP32-C3 edge nodes. This system uses a custom UDP-based transport layer to stream telemetry data (such as soil humidity) to a MERN-style dashboard with sub-millisecond local latency.
+
+---
+
+## 🏗️ System Architecture
+
 ```mermaid
 graph TD
-    %% Layer 1: The Edge
-    subgraph "1. TELEMETRY (Physical Layer)"
-        A[Soil Moisture Sensor] -- Analog Signal --> B[ESP32 Microcontroller]
+    subgraph "Edge Layer (ESP32-C3)"
+        A[Soil Sensor] -->|Analog Read| B(ADC 12-bit)
+        B -->|CSV Packet| C[UDP Client]
     end
 
-    %% Layer 2: The Transport
-    subgraph "2. COLLECTION (Network Layer)"
-        B -- WiFi / MQTT Publish --> C{MQTT Broker}
-        C -- Data Stream --> D[Python/Node-RED Script]
+    subgraph "Transport Layer (WiFi/UDP)"
+        C -->|Port 4210| D{Windows Firewall}
     end
 
-    %% Layer 3: The Brain
-    subgraph "3. AGGREGATION (Processing Layer)"
-        D -- "Windowing (Average)" --> E[Noise Filter]
-        E -- "Threshold Check" --> F[Decision Logic]
+    subgraph "Backend Engine (Python/Flask)"
+        D -->|Allow| E[UDP Listener Thread]
+        E -->|Sequence Analysis| F[Socket.io Server]
+        E -->|Throttled 60s| G[(SQLite DB)]
     end
 
-    %% Layer 4: The System
-    subgraph "4. SYSTEM OUTPUT (Application Layer)"
-        F -- Store --> G[(Time-Series DB)]
-        G -- Visualize --> H[Grafana Dashboard]
-        F -- Alert --> I[Water Pump / Notification]
+    subgraph "Frontend Dashboard (React)"
+        F -->|Real-time Push| H[Dashboard Card]
+        H -->|Gap Detection| I[Packets Dropped Counter]
+        G -->|REST API| J[Hourly History Graph]
     end
-
-    %% Styling
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style B fill:#bbf,stroke:#333,stroke-width:2px
-    style D fill:#dfd,stroke:#333,stroke-width:2px
-    style G fill:#ffd,stroke:#333,stroke-width:2px
