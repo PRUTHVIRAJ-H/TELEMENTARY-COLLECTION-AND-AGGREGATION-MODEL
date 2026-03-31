@@ -28,3 +28,4 @@ graph TD
         H -->|Gap Detection| I[Packets Dropped Counter]
         G -->|REST API| J[Hourly History Graph]
     end
+```
