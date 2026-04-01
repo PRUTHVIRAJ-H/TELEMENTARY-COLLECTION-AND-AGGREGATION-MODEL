@@ -6,6 +6,17 @@ A high-performance observability platform for ESP32-C3 edge nodes. This system u
 
 ## 🏗️ System Architecture
 
+
+TO RUN SERVER
+PYTHON SERVER.PY
+
+TO RUN CLIENT 
+gcc -c client.c
+./a.out
+
+TO RUN FRONTEND(TELEMETRY DASHBOARD)
+NPM RUN DEV
+
 ```mermaid
 graph TD
     subgraph "Edge Layer (ESP32-C3)"
